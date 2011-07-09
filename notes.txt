@@ -1,0 +1,17 @@
+Dungeon Fight architectural notes
+
+Game sequence alternates between world and combat modes. In explore and combat
+modes. In explore mode, the user inputs movement commands and, where enemies
+are present, can opt to attack them. (Party management is to be completely
+ignored for the moment.) In combat mode, the player inputs a command for each
+party member, and then party and enemy actions are resolved at once.
+
+The most obvious way to handle the two modes is for each to implement a loop,
+with a top-level control context which notices when combat has ended and hands
+control back to the explore loop. In fact, the entire combat loop can probably
+exist within a single combat(party, enemy) command or something.
+
+So we can have an ExploreMode which loads a map and places the user into it,
+and maintains any other information necessary. CombatMode handles the combat
+loop. Game would be the top level, for now, and is mostly responsible for
+setting up ExploreMode.
