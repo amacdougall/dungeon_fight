@@ -14,9 +14,7 @@ class InputReader:
         for command-line input. Returns a list of the input words, split using
         the default str.split().
         """
-        print self.prompt,  # trailing comma ensures no newline after prompt
-        # input = sys.stdin.readline()
-        return self.process(sys.stdin.readline())
+        return self.process(raw_input(self.prompt))
 
     def process(self, input):
         """Process the input by simply splitting it on whitespace."""
