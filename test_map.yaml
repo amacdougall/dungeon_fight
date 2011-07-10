@@ -1,0 +1,35 @@
+starting_room: Hall
+rooms:
+  -
+    name:     Hall
+    brief:    A short hallway.
+    verbose:  >
+      Longer description of Hall. This description can span multiple lines,
+      we're cool with that. As a matter of fact, it could just go on and on
+      and whatever man. This is just a test to see if it's wrapmargin or
+      textwidth that determines the line breaks; turns out I have no idea.
+    exits:
+      s:  Front Porch
+      n:  Pleasant Garden
+      w:  Living Room
+
+  -
+    name:     Front Porch
+    brief:    A front porch.
+    verbose:  Longer description of Front Porch.
+    exits:
+      n:  Hall
+
+  -
+    name:     Pleasant Garden
+    brief:    A pleasant garden.
+    verbose:  Longer description of Pleasant Garden.
+    exits:
+      s:  Hall
+
+  -
+    name:     Living Room
+    brief:    A living room.
+    verbose:  Longer description of Living Room.
+    exits:
+      e:  Hall
