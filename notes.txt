@@ -15,3 +15,17 @@ So we can have an ExploreMode which loads a map and places the user into it,
 and maintains any other information necessary. CombatMode handles the combat
 loop. Game would be the top level, for now, and is mostly responsible for
 setting up ExploreMode.
+
+Let's start by figuring out how the loop thing will work. Combat will be an
+empty REPL which ends with "quit".
+
+COMBAT
+
+Let's go with a system where passing an object into a factory generates a
+skill action associated with a string. Type the minimum letters which
+unambiguously match that string and you're good to go for that character. The
+second word of the command should be the target enemy. For instance, given a)
+an orc and b) a wolf, and you have the powers "slash", "stab", and "herb", the
+command "sl a" slashes the orc; "st b" stabs the wolf; "s a" is ambiguous and
+gives an error; and "h" unambiguously uses the herb.
+
