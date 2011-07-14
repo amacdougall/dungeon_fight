@@ -3,9 +3,20 @@
 
 class Map:
     """A map of the world, or at least an area."""
-    def __init__(self):
+    def __init__(self, data=None):
         self.rooms = {}
         self.location = None  # current room
+
+        if data is not None:
+            for room_data in data["rooms"]:
+                room = Room(name=room_data["name"],
+                            brief=room_data["brief"],
+                            verbose=room_data["verbose"])
+                room.exits = room_data["exits"]
+                self.rooms[room.name] = room
+
+            self.location = self.rooms[data["starting_room"]]
+
 
     def move(self, direction):
         """Move in the direction, if possible. Return new location, or None."""
