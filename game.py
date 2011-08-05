@@ -1,5 +1,5 @@
 # Core game classes.
-import yaml, textwrap
+import yaml
 from inputreader import ExplorationReader
 from explore.rooms import Map, Room
 
