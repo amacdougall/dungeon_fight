@@ -1,6 +1,8 @@
 # Core game classes.
+import sys
 import yaml
-from inputreader import ExplorationReader
+from input import ExplorationReader
+from output import Writer
 from explore.rooms import Map, Room
 
 
@@ -15,39 +17,50 @@ class Game:
     def __init__(self, map_filename, party_filename=None):
         """Initializes and starts the game."""
 
-        print "map_filename is %s" % map_filename
+        self.writer = Writer(sys.stdout)
+        self.writer.writecr("map_filename is %s" % map_filename)
         self.area = Map(yaml.load(open(map_filename)))
         # self.party = Party(yaml.load(open(party_filename)))
-        print "Welcome to Dungeon Fight!" + "\n"
-        print self.area.location.name + "\n"
-        print "\n".join(textwrap.wrap(self.area.location.verbose))
+        self.writer.writecr("Welcome to Dungeon Fight!")
+        self.write_room(self.area.location, "verbose")
+
         ExploreLoop(self)  # initialize with this game object
-        print "Goodbye."
+
+        self.writer.writecr("Goodbye.")
+
+    def write_room(self, room, mode="brief"):
+        """Write a room description using the current writer."""
+        # TODO: find a better place for this; ExplorationWriter?
+        self.writer.write(room.name)
+        if hasattr(room, mode):
+            self.writer.write(getattr(room, mode))
+        else:
+            raise Exception("Game.write_room: invalid description level " % mode)
+        self.write_exits(room)
+
+    def write_exits(self, room):
+        """Write out the room's exits using the current writer."""
+        # TODO: definitely needs its own class
+        self.writer.writecr("Exits: %s" % ", ".join(room.exits.keys()))
 
 
 class ExploreLoop:
-    """
-    Handles the main exploration loop: movement, combat initiative."""
+    """Handles the main exploration loop: movement, combat initiative."""
 
     def __init__(self, game):
         reader = ExplorationReader()
         command = reader.read()
         exit_commands = ["quit", "exit"]
 
-        print "# initial command: %s" % command
         while not command in exit_commands:
             if command in ["l", "look"]:
-                print game.area.location.name + "\n"
-                print "\n".join(textwrap.wrap(game.area.location.verbose))
-                print "Exits: %s" % ", ".join(game.area.location.exits.keys())
+                game.write_room(game.area.location, "verbose")
             elif command in ["i", "inv"]:
                 print "Inventory is not yet implemented."
             else:
                 # interpret as movement direction
                 if game.area.move(command) is not None:
-                    print game.area.location.name
-                    print game.area.location.brief
-                    print "Exits: %s" % ", ".join(game.area.location.exits.keys())
+                    game.write_room(game.area.location)
                 else:
                     print "There is no exit in that direction.\n"
             command = reader.read()

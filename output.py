@@ -17,14 +17,20 @@ class Writer:
             raise "Writer.write: no outputs available"
 
         writeable_outputs = [out for out in self.outputs if not out.closed]
+        lines = message.split(self.line_separator)
+
         for out in writeable_outputs:
-            out.write("%s\n" % self.format(message))
+            out.write("%s%s" % (self.format(message), self.line_separator))
             out.flush()  # so tail output shows up immediately, for instance
+
+    def cr(self):
+        self.write(self.line_separator)
 
     def writecr(self, message):
         """Write the message, followed by the line separator, to all available
         outputs."""
-        self.write("%s%s" % (message, self.line_separator))
+        self.write(message)
+        self.cr()
 
     def format(self, message):
         """Format the message using wrap_function, if any."""
