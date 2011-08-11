@@ -1,10 +1,9 @@
+# Output classes which write to file-like objects.
 import textwrap
 
 
 class Writer:
-    """
-    Base class for writing output.
-    """
+    """Base class for writing output."""
 
     def __init__(self, *args):
         self.outputs = list(args)
@@ -38,3 +37,22 @@ class Writer:
             return self.line_separator.join(self.wrap_function(message))
         else:
             return message
+
+
+class ExplorationWriter(Writer):
+    """Class which writes exploration-mode output."""
+
+    def write_room(self, room, mode="brief"):
+        """Write a room description using the current writer."""
+
+        self.write(room.name)
+        if hasattr(room, mode):
+            self.write(getattr(room, mode))
+        else:
+            raise Exception("Game.write_room: invalid description level " % mode)
+        self.write_exits(room)
+
+    def write_exits(self, room):
+        """Write out the room's exits using the current writer."""
+
+        self.writecr("Exits: %s" % ", ".join(room.exits.keys()))
