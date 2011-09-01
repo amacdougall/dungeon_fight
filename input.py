@@ -22,15 +22,6 @@ class InputReader:
 
 class ExplorationReader(InputReader):
     """Input reader for exploration."""
-    valid_inputs = [
-        # movement
-        "n", "s", "e", "w", "u", "d", "in", "out",
-        # actions
-        "look", "l", "inv", "i", "fight",
-        # meta
-        "quit", "exit",
-    ]
-
     def __init__(self):
         self.prompt = "> "
 
@@ -40,4 +31,4 @@ class ExplorationReader(InputReader):
 
     def process(self, input):
         """Process the input by validating it against allowed inputs."""
-        return input if input in ExplorationReader.valid_inputs else None
+        return input

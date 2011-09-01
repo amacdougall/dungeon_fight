@@ -9,6 +9,7 @@ class Writer:
         self.outputs = list(args)
         self.wrap_function = textwrap.wrap  # default text wrap function
         self.line_separator = "\n"
+        self.debug = False
 
     def write(self, message):
         """Write the message to all available outputs."""
@@ -37,6 +38,11 @@ class Writer:
             return self.line_separator.join(self.wrap_function(message))
         else:
             return message
+
+    def trace(self, message):
+        """Outputs a message only if self.debug is True."""
+        if self.debug:
+            self.write(message)
 
 
 class ExplorationWriter(Writer):

@@ -3,6 +3,7 @@ import sys
 import yaml
 from input import ExplorationReader
 from output import ExplorationWriter
+from interpreter import ExplorationInterpreter
 from explore.rooms import Map, Room
 
 
@@ -34,20 +35,14 @@ class ExploreLoop:
 
     def __init__(self, game):
         reader = ExplorationReader()
-        command = reader.read()
+        interpreter = ExplorationInterpreter(game)
         exit_commands = ["quit", "exit"]
 
+        command = reader.read()
+
+        # TODO: handle exit commands from Interpreter as well
         while not command in exit_commands:
-            if command in ["l", "look"]:
-                game.writer.write_room(game.area.location, "verbose")
-            elif command in ["i", "inv"]:
-                game.writer.writecr("Inventory is not yet implemented.")
-            else:
-                # interpret as movement direction
-                if game.area.move(command) is not None:
-                    game.writer.write_room(game.area.location)
-                else:
-                    game.writer.writecr("There is no exit in that direction.\n")
+            interpreter.interpret(command)
             command = reader.read()
 
 if __name__ == "__main__":
