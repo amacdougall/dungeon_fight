@@ -2,7 +2,7 @@
 import re
 
 
-class Interpreter:
+class Interpreter(object):
     """Base class for interpreting user input."""
     def __init__(self, game):
         self.game = game
@@ -16,7 +16,7 @@ class Interpreter:
     def interpret(self, user_input):
         """Template method for command interpretation. Subclasses must implement."""
         words = self.tokenize(user_input)
-        
+
         if words is not None and not re.match(r"\s+", words[0]):
             command = self.find_command(words[0])
             if command:

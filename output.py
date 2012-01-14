@@ -2,7 +2,7 @@
 import textwrap
 
 
-class Writer:
+class Writer(object):
     """Base class for writing output."""
 
     def __init__(self, *args):

@@ -1,7 +1,7 @@
 # Classes defining rooms in the world model.
 
 
-class Map:
+class Map(object):
     """A map of the world, or at least an area."""
     def __init__(self, data=None):
         self.rooms = {}
@@ -29,7 +29,7 @@ class Map:
         return self.location
 
 
-class Room:
+class Room(object):
     """A simple room within the world."""
     def __init__(self, **kwargs):
         self.name = kwargs["name"] if "name" in kwargs else None

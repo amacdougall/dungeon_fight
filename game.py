@@ -7,7 +7,7 @@ from interpreter import ExplorationInterpreter
 from explore.rooms import Map, Room
 
 
-class Game:
+class Game(object):
     """
     The core class which controls the game loops.
 
@@ -21,7 +21,6 @@ class Game:
         self.writer = ExplorationWriter(sys.stdout)  # TODO: writer switching
         self.writer.writecr("map_filename is %s" % map_filename)
         self.area = Map(yaml.load(open(map_filename)))
-        # self.party = Party(yaml.load(open(party_filename)))
         self.writer.writecr("Welcome to Dungeon Fight!")
         self.writer.write_room(self.area.location, "verbose")
 
@@ -30,7 +29,7 @@ class Game:
         self.writer.writecr("Goodbye.")
 
 
-class ExploreLoop:
+class ExploreLoop(object):
     """Handles the main exploration loop: movement, combat initiative."""
 
     def __init__(self, game):
