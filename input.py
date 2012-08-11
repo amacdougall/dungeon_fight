@@ -3,32 +3,31 @@ import sys
 
 
 class InputReader(object):
-    """Input reading base class."""
-    def __init__(self):
-        self.prompt = "> "
+    """
+    Input reading base class. Controls prompt, which may display game data, and
+    input reading and validation.
+    """
+    def __init__(self, game):
+        self.game = game
 
     def read(self):
-        """Prompt and read from stdin, returning a list of tokens.
+        """
+        Prompt and read from stdin, returning a list of tokens.
 
         Prints the current value of self.prompt without a newline, then waits
-        for command-line input. Returns a list of the input words, split using
-        the default str.split()."""
-        return self.process(raw_input(self.prompt))
+        for command-line input. Returns the input, after passing it through the
+        process command.
+        """
+        return self.process(raw_input(self.build_prompt()))
+
+    def build_prompt(self):
+        """Return a simple angle-bracket prompt."""
+        return "> "
+
 
     def process(self, input):
-        """Process the input by simply splitting it on whitespace."""
-        return input.split()
-
-
-class ExplorationReader(InputReader):
-    """Input reader for exploration."""
-    def __init__(self):
-        self.prompt = "> "
-
-    def read(self):
-        """Prompt and read from stdin, returning a single word."""
-        return self.process(raw_input(self.prompt))
-
-    def process(self, input):
-        """Process the input by validating it against allowed inputs."""
+        """
+        Simply return the input as-is. Subclasses may override to provide more
+        elaborate splitting, validation, etc.
+        """
         return input

@@ -56,3 +56,12 @@ class ExplorationInterpreter(Interpreter):
             (r"d(own)?",            self.game.move_command("d")),
             (r"(z|wait)",           self.game.wait),
         )
+
+class CombatInterpreter(Interpreter):
+    """All commands in combat mode."""
+    def __init__(self, game):
+        Interpreter.__init__(self, game)
+
+        self.commands = (
+            (r"fight",             self.game.fight),
+        )

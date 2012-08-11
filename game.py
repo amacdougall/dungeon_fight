@@ -1,7 +1,7 @@
 # Core game classes.
 import sys
 import yaml
-from input import ExplorationReader
+from input import InputReader
 from output import ExplorationWriter
 from interpreter import ExplorationInterpreter
 from explore.rooms import Map, Room
@@ -29,6 +29,7 @@ class Game(object):
 
         self.writer.writecr("Goodbye.")
 
+    # EXPLORATION COMMANDS
     def look(self, arguments=None):
         self.writer.write_room(self.area.location, "verbose")
 
@@ -50,6 +51,11 @@ class Game(object):
     def exit(self, arguments=None):
         self.exit_requested = True
 
+    # COMBAT COMMANDS
+    def fight(self, arguments=None):
+        """Placeholder combat command."""
+        pass
+
 
 class ExploreLoop(object):
     """
@@ -58,7 +64,7 @@ class ExploreLoop(object):
     """
 
     def __init__(self, game):
-        reader = ExplorationReader()
+        reader = InputReader(game)
         interpreter = ExplorationInterpreter(game)
 
         while not game.exit_requested:
