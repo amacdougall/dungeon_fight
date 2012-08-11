@@ -29,13 +29,13 @@ class Game(object):
 
         self.writer.writecr("Goodbye.")
 
-    def look(self):
+    def look(self, arguments=None):
         self.writer.write_room(self.area.location, "verbose")
 
-    def inventory(self):
+    def inventory(self, arguments=None):
         self.writer.writecr("Inventory is not yet implemented.")
 
-    def wait(self):
+    def wait(self, arguments=None):
         self.writer.writecr("Time passes.")
 
     def move_command(self, direction):
@@ -47,7 +47,7 @@ class Game(object):
 
         return command
 
-    def exit(self):
+    def exit(self, arguments=None):
         self.exit_requested = True
 
 

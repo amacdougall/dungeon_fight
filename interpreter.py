@@ -44,31 +44,15 @@ class ExplorationInterpreter(Interpreter):
 
         # remember that the first matching pattern executes
         self.commands = (
-            (r"(quit|exit)",        self.exit),
-            (r"l(ook)?",            self.look),
-            (r"i(nv(entory)?)?",    self.inventory),
+            (r"(quit|exit)",        self.game.exit),
+            (r"l(ook)?",            self.game.look),
+            (r"i(nv(entory)?)?",    self.game.inventory),
             # yes, the long names are actually aliases for the short ones
-            (r"e(ast)?",            self.move_command("e")),
-            (r"w(est)?",            self.move_command("w")),
-            (r"n(orth)?",           self.move_command("n")),
-            (r"s(outh)?",           self.move_command("s")),
-            (r"up?",                self.move_command("u")),
-            (r"d(own)?",            self.move_command("d")),
-            (r"(z|wait)",           self.wait),
+            (r"e(ast)?",            self.game.move_command("e")),
+            (r"w(est)?",            self.game.move_command("w")),
+            (r"n(orth)?",           self.game.move_command("n")),
+            (r"s(outh)?",           self.game.move_command("s")),
+            (r"up?",                self.game.move_command("u")),
+            (r"d(own)?",            self.game.move_command("d")),
+            (r"(z|wait)",           self.game.wait),
         )
-
-    def look(self, arguments=None):
-        self.game.look()
-
-    def inventory(self, arguments=None):
-        self.game.inventory()
-
-    def wait(self, arguments=None):
-        self.game.wait()
-
-    def move_command(self, direction):
-        """Returns a function which attempts to move in the stated direction."""
-        return self.game.move_command(direction)
-
-    def exit(self, arguments=None):
-        self.game.exit()
