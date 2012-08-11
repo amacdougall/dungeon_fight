@@ -41,7 +41,10 @@ class ExplorationInterpreter(Interpreter):
     """All commands in exploration mode."""
     def __init__(self, game):
         Interpreter.__init__(self, game)
+
+        # remember that the first matching pattern executes
         self.commands = (
+            (r"(quit|exit)",        self.exit),
             (r"l(ook)?",            self.look),
             (r"i(nv(entory)?)?",    self.inventory),
             # yes, the long names are actually aliases for the short ones
@@ -66,3 +69,6 @@ class ExplorationInterpreter(Interpreter):
     def move_command(self, direction):
         """Returns a function which attempts to move in the stated direction."""
         return self.game.move_command(direction)
+
+    def exit(self, arguments=None):
+        self.game.exit()

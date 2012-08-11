@@ -17,6 +17,7 @@ class Game(object):
 
     def __init__(self, map_filename, party_filename=None):
         """Initializes and starts the game."""
+        self.exit_requested = False
 
         self.writer = ExplorationWriter(sys.stdout)  # TODO: writer switching
         self.writer.writecr("map_filename is %s" % map_filename)
@@ -46,21 +47,24 @@ class Game(object):
 
         return command
 
+    def exit(self):
+        self.exit_requested = True
+
 
 class ExploreLoop(object):
-    """Handles the main exploration loop: movement, combat initiative."""
+    """
+    Handles the main exploration loop: movement, combat initiative. This loop
+    may invoke secondary loops such as inventory, combat.
+    """
 
     def __init__(self, game):
         reader = ExplorationReader()
         interpreter = ExplorationInterpreter(game)
-        exit_commands = ["quit", "exit"]
 
-        command = reader.read()
-
-        # TODO: handle exit commands from Interpreter as well
-        while not command in exit_commands:
-            interpreter.interpret(command)
+        while not game.exit_requested:
             command = reader.read()
+            interpreter.interpret(command)
+
 
 if __name__ == "__main__":
     game = Game("test_map.yaml")
