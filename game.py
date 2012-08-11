@@ -28,6 +28,24 @@ class Game(object):
 
         self.writer.writecr("Goodbye.")
 
+    def look(self):
+        self.writer.write_room(self.area.location, "verbose")
+
+    def inventory(self):
+        self.writer.writecr("Inventory is not yet implemented.")
+
+    def wait(self):
+        self.writer.writecr("Time passes.")
+
+    def move_command(self, direction):
+        def command(arguments=None):
+            if self.area.move(direction) is not None:
+                self.writer.write_room(self.area.location)
+            else:
+                self.writer.writecr("There is no exit in this direction.")
+
+        return command
+
 
 class ExploreLoop(object):
     """Handles the main exploration loop: movement, combat initiative."""

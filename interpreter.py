@@ -55,21 +55,14 @@ class ExplorationInterpreter(Interpreter):
         )
 
     def look(self, arguments=None):
-        self.game.writer.write_room(self.game.area.location, "verbose")
+        self.game.look()
 
     def inventory(self, arguments=None):
-        self.game.writer.writecr("Inventory is not yet implemented.")
+        self.game.inventory()
 
     def wait(self, arguments=None):
-        self.game.writer.writecr("Time passes.")
+        self.game.wait()
 
     def move_command(self, direction):
         """Returns a function which attempts to move in the stated direction."""
-
-        def command(arguments=None):
-            if self.game.area.move(direction) is not None:
-                self.game.writer.write_room(self.game.area.location)
-            else:
-                self.game.writer.writecr("There is no exit in this direction.")
-
-        return command
+        return self.game.move_command(direction)

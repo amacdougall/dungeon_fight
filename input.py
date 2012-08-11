@@ -2,7 +2,7 @@
 import sys
 
 
-class InputReader:
+class InputReader(object):
     """Input reading base class."""
     def __init__(self):
         self.prompt = "> "
