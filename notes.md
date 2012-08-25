@@ -53,6 +53,9 @@ sooner, forgoing defenses; or bring up one of a variety of defenses with
 increasing power (damage mitigation, damage avoidance, damage reflection) and
 increasing drawbacks (up-front mana cost, disables some spells, inflicts slow).
 
+We can make combat last longer, to avoid the imbalance that comes from
+traditional spellcaster DPS frontloading.
+
 So everyone has attack power, and there is no defense rating per se. Fighter
 types just have more health, and might get damage mitigation as an intrinsic.
 
@@ -93,4 +96,9 @@ I guess each class has abilities, which are unlocked based on level; each
 ability is an instance of a class, I guess, and it gets applied to the target.
 So if I have a level 5 Wizard, and he should have Fireball, we create a new
 Fireball(wizard), which generates a fireball instance of the appropriate power
-for that character. Then 
+for that character. Then maybe the character has ability lists: action,
+reaction, passive. PCs get to choose from action abilities. Ability invocation
+can be as simple as `guy.action("fireball", target)`.
+
+Abilities can be added or removed by buffs or debuffs; for instance, a damage
+aura might be implemented as a reaction ability.

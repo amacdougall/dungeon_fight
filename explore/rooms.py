@@ -3,6 +3,7 @@
 
 class Map(object):
     """A map of the world, or at least an area."""
+
     def __init__(self, data=None):
         self.rooms = {}
         self.location = None  # current room
@@ -31,9 +32,10 @@ class Map(object):
 
 class Room(object):
     """A simple room within the world."""
-    def __init__(self, **kwargs):
-        self.name = kwargs["name"] if "name" in kwargs else None
-        self.verbose = kwargs["verbose"] if "verbose" in kwargs else None
-        self.brief = kwargs["brief"] if "brief" in kwargs else None
+
+    def __init__(self, name=None, verbose=None, brief=None):
+        self.name = name
+        self.verbose = verbose
+        self.brief = brief
         self.items = []  # items lying in the room
         self.exits = {}  # direction->room_name pairs
