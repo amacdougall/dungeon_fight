@@ -31,3 +31,10 @@ class InputReader(object):
         elaborate splitting, validation, etc.
         """
         return input
+
+class CombatReader(InputReader):
+    """
+    Handles user input during combat. Displays party status before each prompt.
+    """
+    def build_prompt(self):
+        return "combat >"
