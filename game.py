@@ -1,9 +1,9 @@
 # Core game classes.
 import sys
 import yaml
-from input import InputReader
-from output import ExplorationWriter
 from interpreter import ExplorationInterpreter
+from commands import ExplorationCommands
+from output import ExplorationWriter
 from explore.rooms import Map, Room
 
 
@@ -29,27 +29,6 @@ class Game(object):
 
         self.writer.writecr("Goodbye.")
 
-    # EXPLORATION COMMANDS
-    def look(self, arguments=None):
-        self.writer.write_room(self.area.location, "verbose")
-
-    def inventory(self, arguments=None):
-        self.writer.writecr("Inventory is not yet implemented.")
-
-    def wait(self, arguments=None):
-        self.writer.writecr("Time passes.")
-
-    def move_command(self, direction):
-        def command(arguments=None):
-            if self.area.move(direction) is not None:
-                self.writer.write_room(self.area.location)
-            else:
-                self.writer.writecr("There is no exit in this direction.")
-
-        return command
-
-    def exit(self, arguments=None):
-        self.exit_requested = True
 
     # COMBAT COMMANDS
     def fight(self, arguments=None):
@@ -64,12 +43,10 @@ class ExploreLoop(object):
     """
 
     def __init__(self, game):
-        reader = InputReader(game)
-        interpreter = ExplorationInterpreter(game)
+        interpreter = ExplorationInterpreter(ExplorationCommands(game))
 
         while not game.exit_requested:
-            command = reader.read()
-            interpreter.interpret(command)
+            interpreter.next_command()  # handle user input
 
 
 if __name__ == "__main__":

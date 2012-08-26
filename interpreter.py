@@ -1,67 +1,94 @@
 # Classes which map user input to commands.
 import re
+import pdb
 
 
 class Interpreter(object):
-    """Base class for interpreting user input."""
-    def __init__(self, game):
-        self.game = game
+    """
+    Base class for reading and interpreting user input. Call next_command() to
+    prompt for user input and convert it to a game logic method call.
+    Interpreter classes should never have to do game logic, and game logic
+    should never have to interpret strings.
 
-    def tokenize(self, s):
-        """Naive string tokenization implementation: return a list of words, or
+    The commands argument may be any object which has a patterns property; a
+    patterns object must be a tuple or list of (pattern, command) tuples or
+    lists. This pattern mapping will be used to match command names with command
+    functions.
+
+    The command functions can come from anywhere, but will probably be
+    references to methods on the commands object. The commands object is
+    required to have the following commands: "command_not_found" and
+    "command_is_whitespace".
+    """
+    def __init__(self, commands):
+        self.commands = commands
+
+    def read(self):
+        """
+        Prompt and read from stdin, returning output usable by interpret().
+        Calls build_prompt() to prompt for input, and process() to generate
+        interpretable output.
+        """
+        return self.process(raw_input(self.build_prompt()))
+
+    def build_prompt(self):
+        """
+        Return a simple angle-bracket prompt. Subclasses may override to provide
+        status information or other data or decoration along with the prompt.
+        """
+        return "> "
+
+    def process(self, user_input):
+        """
+        Convert the raw user input string into a form usable by interpret().
+        This implementation uses the default tokenize(), but subclasses may
+        override this, tokenize(), or both.
+        """
+        return self.tokenize(user_input)
+
+    def tokenize(self, string=""):
+        """
+        Naive string tokenization implementation: return a list of words, or
         None if no string or an empty string was provided. Simply splits on
-        whitespace under the hood."""
-        return s.split() if s else None
+        whitespace under the hood, after stripping leading and trailing
+        whitespace.
+        """
+        return string.strip().split()
 
-    def interpret(self, user_input):
-        """Template method for command interpretation. Subclasses must implement."""
-        words = self.tokenize(user_input)
+    def next_command(self):
+        """
+        Interpret the user input, ultimately calling a game logic command.
+        Subclasses probably do not have to override this method as long as they
+        implement read() and interpret().
+        """
+        self.interpret(self.read())
 
-        if words is not None and not re.match(r"\s+", words[0]):
-            command = self.find_command(words[0])
-            if command:
-                command(words[1:] or None)
-            else:
-                self.game.writer.writecr(
-                    "I don't know what '%s' means." % user_input)
+    def interpret(self, tokens=None):
+        """
+        Given a list of tokens, find an appropriate command in the commands
+        object and invoke it with appropriate arguments. Subclasses must
+        implement; this example implementation simply finds the base command by
+        matching the first argument, and executes it without further arguments.
+        """
+        if tokens is None:
+            raise "Interpret.interpret(): no tokens provided."
+
+        command = self.find_command(tokens[0])
+
+        if command:
+            command()
         else:
-            pass
-            # TODO: raise an exception or something
+            commands.command_not_found()
 
-    def find_command(self, action_name):
-        """Search self.commands for a matching pattern and return the
-        corresponding command function."""
-        for pattern, command in self.commands:
-            if re.match(pattern, action_name):
+    def find_command(self, name):
+        """
+        Search self.commands.patterns for the first matching pattern and return
+        the corresponding command function.
+        """
+        for pattern, command in self.commands.patterns:
+            if re.match(pattern, name):
                 return command
         return None
 
-
 class ExplorationInterpreter(Interpreter):
-    """All commands in exploration mode."""
-    def __init__(self, game):
-        Interpreter.__init__(self, game)
-
-        # remember that the first matching pattern executes
-        self.commands = (
-            (r"(quit|exit)",        self.game.exit),
-            (r"l(ook)?",            self.game.look),
-            (r"i(nv(entory)?)?",    self.game.inventory),
-            # yes, the long names are actually aliases for the short ones
-            (r"e(ast)?",            self.game.move_command("e")),
-            (r"w(est)?",            self.game.move_command("w")),
-            (r"n(orth)?",           self.game.move_command("n")),
-            (r"s(outh)?",           self.game.move_command("s")),
-            (r"up?",                self.game.move_command("u")),
-            (r"d(own)?",            self.game.move_command("d")),
-            (r"(z|wait)",           self.game.wait),
-        )
-
-class CombatInterpreter(Interpreter):
-    """All commands in combat mode."""
-    def __init__(self, game):
-        Interpreter.__init__(self, game)
-
-        self.commands = (
-            (r"fight",             self.game.fight),
-        )
+    pass
