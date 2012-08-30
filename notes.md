@@ -102,3 +102,9 @@ can be as simple as `guy.action("fireball", target)`.
 
 Abilities can be added or removed by buffs or debuffs; for instance, a damage
 aura might be implemented as a reaction ability.
+
+
+# Ruby Rewrite
+
+`STDOUT.sync = true` causes print commands to output to the console (i.e. flush)
+immediately. With this option enabled, `print "> "; input = gets` works.
