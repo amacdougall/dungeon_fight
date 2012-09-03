@@ -21,8 +21,7 @@ class Writer
     lines = message.split(@line_separator)
 
     writeable_outputs.each do |out|
-      # TODO: format
-      out.write("#{message}#{@line_separator}")
+      out.write(format("#{message}#{@line_separator}"))
     end
   end
 
@@ -42,13 +41,16 @@ class Writer
     write "> "
   end
 
-  # Format the message using wrap_function, if any.
-  # TODO: this, but in Ruby
-  # def format(self, message):
-  #     if self.wrap_function is not None:
-  #         return self.line_separator.join(self.wrap_function(message))
-  #     else:
-  #         return message
+  def wrap(message, col=78)
+     message.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n")
+  end
+
+  # Format the message using the wrap method, if any.
+  # TODO: per-output format methods; or remove outputs in general to their own
+  # writeable classes
+  def format(message)
+    wrap(message)
+  end
 
   # Outputs a message only if @debug is true.
   def trace(message)
