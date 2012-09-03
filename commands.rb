@@ -31,18 +31,18 @@ class ExplorationCommands
   end
 
   def inventory
-    @game.writer.writecr("Inventory is not yet implemented.")
+    @game.writer.paragraph("Inventory is not yet implemented.")
   end
 
   def wait
-    @game.writer.writecr("Time passes.")
+    @game.writer.paragraph("Time passes.")
   end
 
   def move(direction)
     if not @game.area.move(direction).nil?
       @game.writer.write_room(@game.area.location)
     else
-      @game.writer.writecr("There is no exit in this direction.")
+      @game.writer.paragraph("There is no exit in this direction.")
     end
   end
 

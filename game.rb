@@ -4,10 +4,6 @@ require './commands'
 require './output'
 require './map'
 
-
-# enable print statements to output without newlines
-STDOUT.sync = true
-
 # The core class which controls the game loops.
 # 
 # Given map and party YAML, loads the player into the starting position.
@@ -19,14 +15,14 @@ class Game
     @exit_requested = false
 
     @writer = ExplorationWriter.new(STDOUT)
-    @writer.writecr("map_filename is %s" % map_filename)
+    @writer.paragraph("map_filename is %s" % map_filename)
     @area = Map.new(YAML.load(File.read(map_filename)))
-    @writer.writecr("Welcome to Dungeon Fight!")
+    @writer.paragraph("Welcome to Dungeon Fight!")
     @writer.write_room(@area.location, "verbose")
 
     ExploreLoop.new(self)  # initialize with this game object
 
-    @writer.writecr("Goodbye.")
+    @writer.paragraph("Goodbye.")
   end
 end
 
